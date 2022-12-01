@@ -11,7 +11,7 @@ This script was created thanks to [Pavan Vara Prasad Mamidi](https://www.linkedi
 <details>
   <summary>Script</summary>
 
-  ```dataweave
+```dataweave
 %dw 2.0
 output application/json
 ---
@@ -21,6 +21,10 @@ map ((item,index) -> do {
     ---
     sum(newItem) as Number
 })
-then max($)
+//then max($) //Part 1
+//Part 2 below
+orderBy $
+then $[-1 to -3]
+then sum($)
 ```
 </details>
