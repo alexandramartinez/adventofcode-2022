@@ -2,7 +2,9 @@
 
 DataWeave scripts used in the [adventofcode.com](https://adventofcode.com/) site for 2022.
 
-## Day 1
+## Scripts
+
+### Day 1
 
 This script was created thanks to [Pavan Vara Prasad Mamidi](https://www.linkedin.com/in/pavan-mamidi/) during [this live stream](https://www.twitch.tv/videos/1667481264).
 
@@ -29,7 +31,7 @@ then sum($)
 ```
 </details>
 
-## Day 2
+### Day 2
 
 This script was created during [this live stream](https://www.twitch.tv/videos/1673658599).
 
@@ -89,3 +91,9 @@ reduce ((round, score=0) -> do {
 })
 ```
 </details>
+
+## Other repos
+
+- Clayton Flesher's [AdventOfCode2022](https://github.com/claytonflesher/AdventOfCode2022/tree/main/src/main/resources/dwl)
+- Ryan Hoegg's [adventofcode2022](https://github.com/rhoegg/adventofcode2022)
+- Felix Schnabel's [aoc2022](https://github.com/Shadow-Devil/aoc2022)
