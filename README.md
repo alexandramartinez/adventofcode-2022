@@ -92,6 +92,57 @@ reduce ((round, score=0) -> do {
 ```
 </details>
 
+### Day 3
+
+This script was created during the following live streams:
+1. [Happy new year!! First stream of 2023 ✨ | Advent of Code day 3](https://www.twitch.tv/videos/1710480386)
+2. [Advent of Code day 3 with DataWeave...FINALIZED!](https://www.twitch.tv/videos/1710523773)
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday3"><img width="300" src="/images/dwplayground-button.png"><a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+output application/json 
+import divideBy, firstWith, indexOf from dw::core::Arrays
+var values = "-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" splitBy ""
+fun findChars(first, second) = (
+    (first map (firstItem) -> do {
+        second firstWith ($ contains firstItem)
+    }) 
+    filter $ != null 
+    distinctBy $
+)
+---
+payload splitBy "\n"
+divideBy 3 // PART 2 ONLY
+map do {
+    // PART 1
+    /*
+    var middle = sizeOf($) / 2
+    var first = $[0 to middle-1] splitBy ""
+    var second = $[middle to -1] splitBy ""
+    ---
+    findChars(first, second) 
+    */
+    // PART 2
+    var first = $[0] splitBy ""
+    var second = $[1] splitBy ""
+    var third = $[2] splitBy ""
+    ---
+    findChars(first, second)
+    then findChars($, third)
+}
+then flatten($)
+then $ map do {
+    values indexOf $
+}
+then sum($)
+```
+</details>
+
 ## Other repos
 
 - Clayton Flesher's [AdventOfCode2022](https://github.com/claytonflesher/AdventOfCode2022/tree/main/src/main/resources/dwl)
