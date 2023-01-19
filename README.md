@@ -143,6 +143,145 @@ then sum($)
 ```
 </details>
 
+### Day 4
+
+This script was created during the following live stream:
+1. [Advent of Code 2022 day 4 -- with DataWeave!](https://www.twitch.tv/videos/1711294136)
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday4"><img width="300" src="/images/dwplayground-button.png"><a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+output application/json 
+import countBy, some from dw::core::Arrays
+fun getRange(sections) = do {
+    var arr = sections splitBy "-"
+    var range = arr[0] to arr[1]
+    ---
+    // PART 1
+    //" $(range joinBy " , ") "
+    // PART 2
+    range
+}
+---
+payload splitBy "\n"
+map do {
+    var pairs = $ splitBy ","
+    var first = getRange(pairs[0])
+    var second = getRange(pairs[1])
+    ---
+    // PART 1
+    //(first contains second) or (second contains first)
+    // PART 2
+    (first map (firstItem) -> (
+        second some $ == firstItem
+    )) some $
+} 
+countBy $
+```
+</details>
+
+### Day 5
+
+This script was created during the following live streams:
+1. [Still doing Advent of Code '22 day 5 with DataWeave!](https://www.twitch.tv/videos/1712147286)
+2. [Advent of Code 2022 days 5.2 and 6! ✨](https://www.twitch.tv/videos/1712316242)
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday5"><img width="300" src="/images/dwplayground-button.png"><a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+output application/json 
+import isUpperCase from dw::core::Strings
+import take, drop from dw::core::Arrays
+import update from dw::util::Values
+
+var instructions = (payload splitBy "\n\n")[1] splitBy "\n"
+    then $ map do {
+        var i = flatten($ scan /\d+/)
+        ---
+        {
+            crates: i[0] as Number,
+            from: i[1]-1,
+            to: i[2]-1
+        }
+    }
+var crates = (payload splitBy "\n\n")[0] splitBy "\n"
+
+fun getStuff(crates, result=[]) = do {
+    var r = crates map (
+            $[0 to 2] filter isUpperCase($)
+        ) filter !isEmpty($)
+        //then $[-1 to 0]
+    var nc = crates map $[4 to -1]
+    var newr = result + r
+    ---
+    if (nc[0] == null) newr
+    else getStuff(nc,newr)
+}
+
+fun move(instructions, crates) = do {
+    @Lazy
+    var i = instructions[0]
+    @Lazy
+    var cratesToTake = crates[i.from] take i.crates
+    @Lazy
+    var newColumnFrom = crates[i.from] drop i.crates
+    @Lazy
+    // PART 1
+    // var newColumnTo = cratesToTake[-1 to 0] ++ crates[i.to]
+    // PART 2
+    var newColumnTo = cratesToTake ++ crates[i.to]
+    @Lazy
+    var newCrates = crates update i.from with newColumnFrom
+        then $ update i.to with newColumnTo
+    ---
+    if (isEmpty(instructions)) crates
+    else move(instructions drop 1, newCrates)
+}
+---
+move(instructions, getStuff(crates))
+map ($[0]) 
+joinBy ""
+```
+</details>
+
+### Day 6
+
+This script was created during the following live stream:
+1. [Advent of Code 2022 days 5.2 and 6! ✨](https://www.twitch.tv/videos/1712316242)
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday6"><img width="300" src="/images/dwplayground-button.png"><a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+import mapString, someCharacter from dw::core::Strings
+output application/json
+var numberOfMarkers = 14 // PART 1 = 4
+fun findThing(str) = do {
+    var toEvaluate = str[0 to numberOfMarkers-1] splitBy ""
+    var repeated = sizeOf(toEvaluate distinctBy $) < numberOfMarkers
+    ---
+    if (repeated) findThing(str[1 to -1])
+    else if (toEvaluate == null) -1
+    else toEvaluate
+}
+---
+findThing(payload) 
+joinBy ""
+then indexOf(payload, $) + numberOfMarkers
+```
+</details>
+
 ## Other repos
 
 - Clayton Flesher's [AdventOfCode2022](https://github.com/claytonflesher/AdventOfCode2022/tree/main/src/main/resources/dwl)
