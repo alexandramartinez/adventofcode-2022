@@ -282,6 +282,15 @@ then indexOf(payload, $) + numberOfMarkers
 ```
 </details>
 
+### Day 7 - FAILED
+
+Ended up taking [Felix's solution](https://github.com/Shadow-Devil/aoc2022) :(
+
+Here are the live streams to watch me fail 😂:
+1. [Advent of Code 2022 day 7 😭 (Part 1) with DataWeave](https://youtu.be/FpG6s2deJrg)
+2. [Advent of Code 2022 day 7 🧐 (Part 2) with DataWeave](https://youtu.be/n3902h-sAF0)
+3. [Advent of Code 2022 day 7 🥹 (Part 3) #fail with DataWeave](https://youtu.be/TPLgA1iSV7I)
+
 ## Other repos
 
 - Clayton Flesher's [AdventOfCode2022](https://github.com/claytonflesher/AdventOfCode2022/tree/main/src/main/resources/dwl)
