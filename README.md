@@ -291,6 +291,73 @@ Here are the live streams to watch me fail 😂:
 2. [Advent of Code 2022 day 7 🧐 (Part 2) with DataWeave](https://youtu.be/n3902h-sAF0)
 3. [Advent of Code 2022 day 7 🥹 (Part 3) #fail with DataWeave](https://youtu.be/TPLgA1iSV7I)
 
+### Day 8
+
+This script was created during the following live streams:
+1. [Advent of Code 2022 day 8 ✨ Part 1](https://www.twitch.tv/videos/1719259596)
+2. [Advent of Code 2022 day 8.2 and 9.1 with DataWeave ✨](https://www.twitch.tv/videos/1725260442)
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday8"><img width="300" src="/images/dwplayground-button.png"><a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+import countBy, every from dw::core::Arrays
+import lines, everyCharacter from dw::core::Strings
+output application/json
+var linesarr = lines(payload)
+fun countTrees(thisTree:String, nextTrees:String, count=0):Number = do {
+    if (isEmpty(nextTrees)) count
+    else if (nextTrees[0] < thisTree) countTrees(thisTree, nextTrees[1 to -1], count+1)
+    else count+1
+}
+---
+flatten
+(linesarr map (line, y) -> do {
+    var edge = sizeOf(line) - 1
+    ---
+    (line splitBy "") map (tree, x) -> do {
+        // PART 1
+        /*
+        var edges:Boolean = (x == 0 or y == 0 or x == edge or y == edge)
+        var left:Boolean = (line[0 to (x-1)] everyCharacter ($ < tree))
+        var right:Boolean = (line[(x+1) to -1] everyCharacter ($ < tree))
+        var top:Boolean = (linesarr[0 to y-1] every $[x] < tree)
+        var bottom:Boolean = (linesarr[(y+1) to -1] every $[x] < tree)
+        ---
+        edges or left or right or top or bottom
+        */
+
+        // PART 2
+        var left:Number = if (x==0) 1
+            else tree countTrees line[(x-1) to 0]
+        var right:Number = if (x==edge) 1
+            else tree countTrees line[(x+1) to -1]
+        var top:Number = if (y==0) 1
+            else tree countTrees (linesarr[0 to y-1] reduce ((str, a='') -> str[x] ++ a))
+        var bottom:Number = if (y==edge) 1
+            else tree countTrees (linesarr[(y+1) to -1] reduce ((str, a='') -> a ++ str[x]))
+        ---
+        left * right * top * bottom
+
+        // {
+        //     linesarr: 0,
+        //     line: line,
+        //     y: y,
+        //     tree: tree,
+        //     x: x
+        // }
+    }
+}) 
+// PART 1
+//countBy $
+// PART 2
+then max($)
+```
+</details>
+
 ## Other repos
 
 - Clayton Flesher's [AdventOfCode2022](https://github.com/claytonflesher/AdventOfCode2022/tree/main/src/main/resources/dwl)
