@@ -96,7 +96,7 @@ reduce ((round, score=0) -> do {
 
 This script was created during the following live streams:
 1. [Happy new year!! First stream of 2023 ✨ | Advent of Code day 3](https://www.twitch.tv/videos/1710480386)
-2. [Advent of Code day 3 with DataWeave...FINALIZED!](https://www.twitch.tv/videos/1710523773)
+2. [Advent of Code day 3 with DataWeave...FINALIZED!](https://youtu.be/pQNRoY7hJKM)
 
 <a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday3"><img width="300" src="/images/dwplayground-button.png"><a>
 
@@ -146,7 +146,7 @@ then sum($)
 ### Day 4
 
 This script was created during the following live stream:
-1. [Advent of Code 2022 day 4 -- with DataWeave!](https://www.twitch.tv/videos/1711294136)
+1. [Advent of Code 2022 day 4 -- with DataWeave!](https://youtu.be/MTM5J3Qn_aM)
 
 <a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday4"><img width="300" src="/images/dwplayground-button.png"><a>
 
@@ -188,7 +188,7 @@ countBy $
 
 This script was created during the following live streams:
 1. [Still doing Advent of Code '22 day 5 with DataWeave!](https://www.twitch.tv/videos/1712147286)
-2. [Advent of Code 2022 days 5.2 and 6! ✨](https://www.twitch.tv/videos/1712316242)
+2. [Advent of Code 2022 days 5.2 and 6! ✨](https://youtu.be/bWfUth6pvpI)
 
 <a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday5"><img width="300" src="/images/dwplayground-button.png"><a>
 
@@ -255,7 +255,7 @@ joinBy ""
 ### Day 6
 
 This script was created during the following live stream:
-1. [Advent of Code 2022 days 5.2 and 6! ✨](https://www.twitch.tv/videos/1712316242)
+1. [Advent of Code 2022 days 5.2 and 6! ✨](https://youtu.be/bWfUth6pvpI)
 
 <a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday6"><img width="300" src="/images/dwplayground-button.png"><a>
 
@@ -294,8 +294,8 @@ Here are the live streams to watch me fail 😂:
 ### Day 8
 
 This script was created during the following live streams:
-1. [Advent of Code 2022 day 8 ✨ Part 1](https://www.twitch.tv/videos/1719259596)
-2. [Advent of Code 2022 day 8.2 and 9.1 with DataWeave ✨](https://www.twitch.tv/videos/1725260442)
+1. [Advent of Code 2022 day 8 ✨ Part 1](https://youtu.be/FpqoYBBsodU)
+2. [Advent of Code 2022 day 8.2 and 9.1 with DataWeave ✨](https://youtu.be/ADiU4LjvX3U)
 
 > **Note**
 >
@@ -359,6 +359,127 @@ flatten
 //countBy $
 // PART 2
 then max($)
+```
+</details>
+
+### Day 9
+
+This script was created during the following live streams:
+1. [Advent of Code 2022 day 8.2 and 9.1 with DataWeave ✨](https://youtu.be/ADiU4LjvX3U)
+2. [Advent of Code 2022 day 9 ✨ Part 2](https://youtu.be/UDGiwoIXn8Y)
+
+<a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday9"><img width="300" src="/images/dwplayground-button.png"><a>
+
+<details>
+  <summary>Script</summary>
+
+```dataweave
+%dw 2.0
+import lines, repeat from dw::core::Strings
+
+output application/json
+type Point = { // or knot
+    x:Number,
+    y:Number
+}
+type Direction = 'R' | 'L' | 'U' | 'D'
+type Rope = Array<Point>
+var sPoint:Point = {x:0,y:0}
+var rope = (0 to 9) as Array reduce (item, acc=[]) -> acc + sPoint
+fun isNear(point1:Point, point2:Point) = do {
+    var xDistance = abs(point1.x - point2.x)
+    var yDistance = abs(point1.y - point2.y)
+    ---
+    (xDistance <= 1) and (yDistance <= 1)
+}
+fun whichDirections(point1:Point, point2:Point): Array | String = do {
+    var xDistance = point1.x - point2.x
+    var yDistance = point1.y - point2.y
+    var isDiagonal = point1.x != point2.x and point1.y != point2.y
+    ---
+    if (isDiagonal) ([] +
+        (if (xDistance >= 1) 'R'
+        else if (xDistance <= -1) 'L'
+        else '')
+        +
+        (if (yDistance >= 1) 'U'
+        else if (yDistance <= -1) 'D'
+        else '')
+    )
+    else (
+        if (xDistance > 1) 'R'
+        else if (xDistance < -1) 'L'
+        else if (yDistance > 1) 'U'
+        else if (yDistance < -1) 'D'
+        else ''
+    )
+}
+fun move(point:Point, direction:Direction): Point = 
+    direction match {
+		case "D" -> {
+			x: point.x,
+			y: point.y - 1
+		}
+		case "U" -> {
+			x: point.x,
+			y: point.y + 1
+		}
+		case "L" -> {
+			x: point.x - 1,
+			y: point.y
+		}
+		case "R" -> {
+			x: point.x + 1,
+			y: point.y
+		}
+		else -> point
+	}
+fun moveRestOfRope(head:Point, rope:Rope, index=0) = do {
+    var thisPoint:Point = rope[index]
+    @Lazy
+    var wd = log(whichDirections(head, thisPoint))
+    @Lazy
+    var newPoint = wd match {
+        case is String -> thisPoint move wd // single move
+        case is Array -> (thisPoint move wd[0]) move wd[1] // 2 moves - diagonal
+        else -> thisPoint
+    }
+    ---
+    if (isEmpty(thisPoint)) rope
+    else if (head isNear thisPoint) rope
+    else moveRestOfRope(
+        newPoint,
+        rope update {
+            case [index] -> newPoint
+        },
+        index + 1
+    )
+}
+fun getTailPoints(directions:String, rope=rope, tailPoints=[sPoint]) = do {
+    var direction:Direction = directions[0]
+    var head:Point = rope[0]
+    @Lazy
+    var newHead = log("head moves",head move direction)
+    @Lazy
+    var newRope = newHead >> moveRestOfRope(newHead, rope[1 to -1])
+    ---
+    if (isEmpty(directions)) tailPoints
+    else getTailPoints(
+        directions[1 to -1],
+        newRope,
+        tailPoints + newRope[-1]
+    )
+}
+---
+(lines(payload) map (line) -> do {
+    var splits = line splitBy " "
+    var d = splits[0]
+    var howmany = splits[1]
+    ---
+    d repeat howmany
+}) joinBy ""
+then getTailPoints($) distinctBy $
+then sizeOf($)
 ```
 </details>
 
