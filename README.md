@@ -299,6 +299,7 @@ This script was created during the following live streams:
 
 > [!NOTE]
 > The code might not work in the Playground due to a timeout, but it will work from Visual Studio Code.
+</br>
 
 <a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday8"><img width="300" src="/images/dwplayground-button.png"><a>
 
