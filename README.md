@@ -297,8 +297,7 @@ This script was created during the following live streams:
 1. [Advent of Code 2022 day 8 ✨ Part 1](https://youtu.be/FpqoYBBsodU)
 2. [Advent of Code 2022 day 8.2 and 9.1 with DataWeave ✨](https://youtu.be/ADiU4LjvX3U)
 
-> **Note**
->
+> [!NOTE]
 > The code might not work in the Playground due to a timeout, but it will work from Visual Studio Code.
 
 <a href="https://dataweave.mulesoft.com/learn/playground?projectMethod=GHRepo&repo=alexandramartinez%2Fadventofcode-2022&path=scripts%2Fday8"><img width="300" src="/images/dwplayground-button.png"><a>
