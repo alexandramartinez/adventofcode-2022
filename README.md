@@ -2,6 +2,11 @@
 
 DataWeave scripts used in the [adventofcode.com](https://adventofcode.com/) site for 2022.
 
+## Similar repos
+
+[![](https://github-readme-stats.vercel.app/api/pin/?username=alexandramartinez&repo=adventofcode-2023&theme=neon)](https://github.com/alexandramartinez/adventofcode-2023)
+[![](https://github-readme-stats.vercel.app/api/pin/?username=alexandramartinez&repo=adventofcode-2015&theme=neon)](https://github.com/alexandramartinez/adventofcode-2015)
+
 ## Scripts
 
 ### Day 1
